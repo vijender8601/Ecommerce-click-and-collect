@@ -86,7 +86,7 @@ function ProductForm() {
       product.discountPercentage = +product.discountPercentage
       product.stock = +product.stock
       if(params.id){
-        product.id = +params.id;
+        product.id = params.id;
         product.rating = selectedProduct.rating;
         dispatch(
           updateProductAsync(product)
@@ -111,7 +111,7 @@ function ProductForm() {
           </h2>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            {selectedProduct.deleted && <h2 className="sm:col-span-4 text-red-600"> This Product is deleted.</h2>}
+            {selectedProduct?.deleted && <h2 className="sm:col-span-4 text-red-600"> This Product is deleted.</h2>}
             <div className="sm:col-span-4">
               <label
                 htmlFor="title"

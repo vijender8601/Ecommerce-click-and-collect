@@ -95,9 +95,9 @@ function AdminOrders() {
                     {order.items.map(item=>
                       <div className="flex items-center mb-2">
                         <div className="mr-2">
-                          <img src={item.thumbnail} alt="item_img" className="w-6 h-6 rounded-full"></img>
+                          <img src={item.product.thumbnail} alt="item_img" className="w-6 h-6 rounded-full"></img>
                         </div>
-                        <span className="text-black">{item.title} - {item.quantity}</span>
+                        <span className="text-black">{item.product.title} - #{item.quantity}</span>
                       </div>
                     )}
                   </td>

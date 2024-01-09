@@ -7,11 +7,11 @@ import {
   updateCartAsync,
 } from "../features/cart/cartSlice";
 import { useForm } from "react-hook-form";
+import { selectUserInfo, updateUserAsync } from "../features/user/userSlice";
 import {
-  selectUserInfo,
-  updateUserAsync,
-} from "../features/user/userSlice";
-import { createOrderAsync, selectCurrentOrder } from "../features/order/orderSlice";
+  createOrderAsync,
+  selectCurrentOrder,
+} from "../features/order/orderSlice";
 import { discountedPrice } from "../app/constants";
 
 function Checkout() {
@@ -31,10 +31,7 @@ function Checkout() {
   const [paymentMethod, setPaymentMethod] = useState("cash");
 
   const totalAmount = items.reduce(
-    (amount, item) =>
-      discountedPrice(item.product) *
-        item.quantity +
-      amount,
+    (amount, item) => discountedPrice(item.product) * item.quantity + amount,
     0
   );
   const totalItems = items.reduce((amount, item) => item.quantity + amount, 0);
@@ -44,7 +41,7 @@ function Checkout() {
   };
 
   const handleRemove = (itemId) => {
-    console.log("handleRemove " + itemId);
+    // console.log("handleRemove " + itemId);
     dispatch(deleteItemFromCartAsync(itemId));
   };
 
@@ -55,13 +52,13 @@ function Checkout() {
   };
 
   const handlePayments = (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     setPaymentMethod(e.target.value);
     // console.log(paymentMethod);
   };
 
   const handleOrder = (e) => {
-    if(selectedAddress && paymentMethod){
+    if (selectedAddress && paymentMethod) {
       const order = {
         items,
         totalAmount,
@@ -69,11 +66,11 @@ function Checkout() {
         user: user.id,
         paymentMethod,
         selectedAddress,
-        status: 'pending',// other status can be delievered, recieved
+        status: "pending", // other status can be delievered, recieved
       };
       dispatch(createOrderAsync(order));
     } else {
-        alert('Enter and select address and payment method');
+      alert("Enter and select address and payment method");
     }
 
     // TODO: redirect to Order Success
@@ -83,27 +80,32 @@ function Checkout() {
   return (
     <>
       {!items.length && <Navigate to={"/"} replace={true}></Navigate>}
-      
-      {currentOrder!=null && <Navigate to={`/order-success/${currentOrder.id}`} replace={true}></Navigate>}
+
+      {currentOrder != null && currentOrder.paymentMethod === 'cash' && (
+        <Navigate
+          to={`/order-success/${currentOrder.id}`}
+          replace={true}
+        ></Navigate>
+      )}
+      {currentOrder != null && currentOrder.paymentMethod === 'card' && (
+        <Navigate
+          to={`/stripe-checkout/`}
+          replace={true}
+        ></Navigate>
+      )}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
           <div className="lg:col-span-3">
             <form
               className="bg-white px-5 py-5 mt-12 mb-5"
               onSubmit={handleSubmit((data) => {
-                console.log(user, data, "data user in checkout")
                 dispatch(
                   updateUserAsync({
                     ...user,
                     addresses: [...user.addresses, data],
                   })
-                  // checkUserAsync({email: data.email,password:data.password})
                 );
                 reset();
-                console.log({
-                  ...user,
-                  addresses: [...user.addresses, data],
-                });
               })}
             >
               <div className="space-y-12">
@@ -384,10 +386,13 @@ function Checkout() {
                           <div>
                             <div className="flex justify-between text-base font-medium text-gray-900">
                               <h3>
-                                <a href={item.product.href}>{item.product.title}</a>
+                                <a href={item.product.href}>
+                                  {item.product.title}
+                                </a>
                               </h3>
                               <p className="text-sm tracking-tight text-gray-900">
-                                $ {discountedPrice(item.product) * item.quantity}
+                                ${" "}
+                                {discountedPrice(item.product) * item.quantity}
                                 <br></br>
                                 <span className="text-sm font-medium my-2 line-through text-gray-400">
                                   {" "}

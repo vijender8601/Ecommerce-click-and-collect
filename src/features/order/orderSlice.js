@@ -62,7 +62,6 @@ export const orderSlice = createSlice({
         state.orders = action.payload.orders;
         state.totalOrders = action.payload.totalOrders;
 
-        console.log(action.payload, action.payload.orders,action.payload.totalOrders, "here...");
       })
       .addCase(updateOrderAsync.pending, (state) => {
         state.status = "loading";

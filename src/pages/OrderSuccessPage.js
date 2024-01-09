@@ -8,13 +8,12 @@ import { resetOrder } from "../features/order/orderSlice";
 function OrderSuccessPage() {
     const params = useParams();
     const dispatch = useDispatch();
-    const user = useSelector(selectLoggedInUser);
     useEffect(()=>{
     //reset Card
-        dispatch(resetCartAsync(user.id))
+        dispatch(resetCartAsync())
     // reset current Order
     dispatch(resetOrder())
-    },[dispatch,user]);
+    },[dispatch]);
 
     return (
         <>
