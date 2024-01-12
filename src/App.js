@@ -31,6 +31,7 @@ import AdminOrdersPage from "./pages/AdminOrdersPage";
 import { positions, Provider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
 import StripeCheckout from "./pages/StripeCheckout";
+import ResetPassworPage from "./pages/ResetPasswordPage";
 
 const router = createBrowserRouter([
   {
@@ -86,7 +87,7 @@ const router = createBrowserRouter([
     element: <Protected><StripeCheckout></StripeCheckout></Protected>,
   },
   {
-    path: "/orders",
+    path: "/my-orders",
     element: <Protected><UserOrdersPage></UserOrdersPage></Protected>,
   },
   {
@@ -100,6 +101,10 @@ const router = createBrowserRouter([
   {
     path: "/forgot-password",
     element: <ForgotPasswordPage></ForgotPasswordPage>,
+  },
+  {
+    path: "/reset-password",
+    element: <ResetPassworPage></ResetPassworPage>,
   },
   {
     path: "*",
